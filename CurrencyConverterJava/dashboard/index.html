@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Currency Intelligence Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark">₹</span><div><strong>Currency</strong><small>Intelligence</small></div></div>
+      <nav>
+        <a class="active" href="#overview">Overview</a>
+        <a href="#converter">Converter</a>
+        <a href="#rates">Rates</a>
+        <a href="#trend">Trend</a>
+      </nav>
+      <div class="sidebar-footer">Powered by public third-party APIs</div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">LIVE FINANCIAL DATA</p>
+          <h1>Currency Dashboard</h1>
+          <p class="muted">Monitor exchange rates, convert currencies and inspect recent trends.</p>
+        </div>
+        <div class="actions">
+          <span id="statusBadge" class="status"><i></i> Connecting</span>
+          <button id="refreshBtn" class="icon-btn" title="Refresh data">↻</button>
+          <button id="themeBtn" class="icon-btn" title="Toggle theme">☾</button>
+        </div>
+      </header>
+
+      <section id="overview" class="stats-grid">
+        <article class="stat-card"><span>Base Currency</span><strong id="baseValue">INR</strong><small>Live rate source</small></article>
+        <article class="stat-card"><span>USD Rate</span><strong id="usdRate">—</strong><small>1 INR → USD</small></article>
+        <article class="stat-card"><span>EUR Rate</span><strong id="eurRate">—</strong><small>1 INR → EUR</small></article>
+        <article class="stat-card"><span>Last Updated</span><strong id="updatedAt">—</strong><small id="nextUpdate">Waiting for API</small></article>
+      </section>
+
+      <section class="dashboard-grid">
+        <article id="converter" class="panel converter-panel">
+          <div class="panel-head"><div><p class="eyebrow">TOOL</p><h2>Quick Converter</h2></div></div>
+          <div class="converter-row">
+            <label>Amount<input id="amount" type="number" min="0" value="1000" /></label>
+            <label>From<select id="from"></select></label>
+            <button id="swapBtn" class="swap">⇄</button>
+            <label>To<select id="to"></select></label>
+          </div>
+          <div class="conversion-result">
+            <span id="conversionText">Fetching live rates…</span>
+            <small id="conversionRate">—</small>
+          </div>
+        </article>
+
+        <article id="trend" class="panel trend-panel">
+          <div class="panel-head">
+            <div><p class="eyebrow">HISTORY</p><h2>7-Day Trend</h2></div>
+            <select id="trendCurrency" class="compact-select"></select>
+          </div>
+          <div class="chart-wrap"><canvas id="trendChart" width="760" height="260"></canvas></div>
+          <p id="trendNote" class="muted">Historical data is supplied by Frankfurter.</p>
+        </article>
+      </section>
+
+      <section id="rates" class="panel">
+        <div class="panel-head">
+          <div><p class="eyebrow">MARKET SNAPSHOT</p><h2>Popular Currency Rates</h2></div>
+          <button id="showAllBtn" class="text-btn">Show all</button>
+        </div>
+        <div id="rateGrid" class="rate-grid"></div>
+      </section>
+
+      <footer>
+        <span>Live rates: ExchangeRate-API compatible open endpoint</span>
+        <span>History: Frankfurter API</span>
+      </footer>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
