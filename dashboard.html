@@ -3,76 +3,138 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Custom API Dashboard</title>
+<title>CODERHUB-creator | GitHub Profile Dashboard</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,Arial;background:#f4f7fb;color:#172033}.wrap{max-width:1200px;margin:auto;padding:32px}.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}.head h1{margin:0;font-size:30px}.head p{color:#687386}.btn{border:0;border-radius:10px;padding:11px 16px;background:#5b55e8;color:white;cursor:pointer}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.card,.panel{background:white;border:1px solid #e4e8ef;border-radius:16px;padding:20px;box-shadow:0 8px 24px #1820330d}.card span,.muted{color:#748094;font-size:12px}.card strong{display:block;font-size:24px;margin:8px 0}.main{display:grid;grid-template-columns:1fr 1.5fr;gap:16px;margin-top:16px}.panel h2{margin-top:0}.form{display:grid;grid-template-columns:1fr 1fr;gap:12px}label{font-size:12px;color:#687386}input,select{width:100%;padding:12px;margin-top:5px;border:1px solid #dce1ea;border-radius:9px;background:white}.result{margin-top:16px;background:#f0f2ff;border-radius:12px;padding:18px;font-size:22px;font-weight:700}.rates{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.rate{background:#f7f8fa;border-radius:10px;padding:14px}.rate b{display:block;margin-bottom:6px}.status{font-size:12px}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#f59e0b;margin-right:5px}.online .dot{background:#18a66b}@media(max-width:850px){.grid,.main{grid-template-columns:1fr 1fr}.main{grid-template-columns:1fr}.rates{grid-template-columns:1fr 1fr}}@media(max-width:550px){.wrap{padding:18px}.grid,.form,.rates{grid-template-columns:1fr}.head{display:block}.btn{margin-top:10px}}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Arial;background:#0b1020;color:#eef2ff}
+a{color:inherit;text-decoration:none}.wrap{max-width:1250px;margin:auto;padding:28px}
+.hero{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:22px}.profile{display:flex;gap:18px;align-items:center}
+.avatar{width:92px;height:92px;border-radius:24px;border:2px solid #33406a;object-fit:cover;background:#151c33}
+h1{margin:0 0 5px;font-size:30px}.sub{margin:0;color:#9ba7c7}.actions{display:flex;gap:10px;flex-wrap:wrap}.btn{padding:11px 15px;border:1px solid #344163;border-radius:11px;background:#141c34;color:#fff;cursor:pointer}.btn.primary{background:#5865f2;border-color:#5865f2}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.card,.panel{background:#11182d;border:1px solid #222d4b;border-radius:17px;padding:18px;box-shadow:0 12px 30px #0003}.card span,.muted{color:#8e9aba;font-size:12px}.card strong{display:block;font-size:25px;margin:7px 0}.main{display:grid;grid-template-columns:1.35fr .65fr;gap:14px;margin-top:14px}.panel h2{margin:0 0 15px;font-size:18px}
+.repos{display:grid;grid-template-columns:1fr 1fr;gap:12px}.repo{padding:15px;border:1px solid #273352;border-radius:13px;background:#0d1428}.repo h3{margin:0 0 7px;font-size:15px}.repo p{font-size:12px;color:#9ba7c7;min-height:34px;margin:0 0 10px;line-height:1.45}.tags{display:flex;gap:6px;flex-wrap:wrap}.tag{font-size:11px;padding:4px 7px;border-radius:7px;background:#1b2541;color:#b9c4e2}
+.events{display:grid;gap:10px}.event{border-left:2px solid #5865f2;padding:8px 0 8px 12px}.event b{font-size:13px}.event small{display:block;color:#7f8baa;margin-top:3px}
+.quote{font-size:17px;line-height:1.55}.quote-author{color:#8e9aba;margin-top:10px}.status{font-size:12px;color:#8e9aba}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#f0a64a;margin-right:6px}.live .dot{background:#35d07f}
+footer{text-align:center;color:#697696;font-size:11px;padding:18px 0}
+@media(max-width:900px){.grid{grid-template-columns:1fr 1fr}.main{grid-template-columns:1fr}.repos{grid-template-columns:1fr}}@media(max-width:550px){.wrap{padding:17px}.hero{display:block}.actions{margin-top:14px}.grid{grid-template-columns:1fr 1fr}.profile{align-items:flex-start}.avatar{width:70px;height:70px;border-radius:18px}h1{font-size:22px}}
 </style>
 </head>
 <body>
 <div class="wrap">
-<header class="head">
-<div><h1>Custom API Dashboard</h1><p>Live currency intelligence powered by third-party APIs</p></div>
-<div><span id="status" class="status"><i class="dot"></i>Connecting</span> <button class="btn" onclick="load()">Refresh</button></div>
+<header class="hero">
+  <div class="profile">
+    <img id="avatar" class="avatar" src="https://avatars.githubusercontent.com/u/185239975?v=4" alt="GitHub avatar">
+    <div><h1 id="name">CODERHUB-creator</h1><p class="sub" id="bio">Loading GitHub profile…</p><p class="status" id="status"><i class="dot"></i>Connecting to APIs</p></div>
+  </div>
+  <div class="actions">
+    <button class="btn primary" onclick="loadDashboard()">Refresh</button>
+    <a class="btn" href="https://github.com/CODERHUB-creator" target="_blank">GitHub Profile ↗</a>
+  </div>
 </header>
 
 <section class="grid">
-<div class="card"><span>Base Currency</span><strong>INR</strong><span>Indian Rupee</span></div>
-<div class="card"><span>USD Rate</span><strong id="usd">—</strong><span>1 INR → USD</span></div>
-<div class="card"><span>EUR Rate</span><strong id="eur">—</strong><span>1 INR → EUR</span></div>
-<div class="card"><span>Last Update</span><strong id="time">—</strong><span>ExchangeRate API</span></div>
+  <div class="card"><span>Repositories</span><strong id="reposCount">—</strong><span>Public repositories</span></div>
+  <div class="card"><span>Followers</span><strong id="followers">—</strong><span>GitHub followers</span></div>
+  <div class="card"><span>Following</span><strong id="following">—</strong><span>GitHub following</span></div>
+  <div class="card"><span>Public Gists</span><strong id="gists">—</strong><span>GitHub gists</span></div>
 </section>
 
 <section class="main">
-<div class="panel">
-<h2>Currency Converter</h2>
-<div class="form">
-<label>Amount<input id="amount" type="number" value="1000" min="0"></label>
-<label>From<select id="from"></select></label>
-<label>To<select id="to"></select></label>
-</div>
-<div class="result" id="result">Loading live rates…</div>
-</div>
-
-<div class="panel">
-<h2>Popular Market Rates</h2>
-<div class="rates" id="rates"></div>
-<p class="muted">Rates are fetched live from a public third-party exchange-rate API.</p>
-</div>
+  <div class="panel">
+    <h2>Latest Repositories</h2>
+    <div class="repos" id="repos"><p class="muted">Loading repositories…</p></div>
+  </div>
+  <div class="panel">
+    <h2>Developer Quote</h2>
+    <div class="quote" id="quote">Loading quote from a third-party API…</div>
+    <div class="quote-author" id="quoteAuthor"></div>
+  </div>
 </section>
+
+<section class="main">
+  <div class="panel">
+    <h2>Recent GitHub Activity</h2>
+    <div class="events" id="events"><p class="muted">Loading activity…</p></div>
+  </div>
+  <div class="panel">
+    <h2>Profile Details</h2>
+    <div id="details" class="muted">Loading…</div>
+  </div>
+</section>
+
+<footer>Custom dashboard • GitHub REST API + Quotable API • Data loads directly in your browser</footer>
 </div>
 
 <script>
-const API="https://open.er-api.com/v6/latest/";
-const C=["INR","USD","EUR","GBP","JPY","AUD","CAD","CHF","CNY","AED","SGD","NZD","HKD","KRW","THB","MYR","ZAR","BRL","MXN"];
-let rates={};
+const USER="CODERHUB-creator";
+const GH="https://api.github.com";
 const $=id=>document.getElementById(id);
-$("from").innerHTML=C.map(x=>`<option>${x}</option>`).join("");
-$("to").innerHTML=C.map(x=>`<option>${x}</option>`).join("");
-$("from").value="INR";$("to").value="USD";
-$("amount").addEventListener("input",convert);$("from").addEventListener("change",convert);$("to").addEventListener("change",convert);
 
-async function load(){
- $("status").className="status";$("status").innerHTML='<i class="dot"></i>Connecting';
- try{
-  const r=await fetch(API+"INR",{cache:"no-store"}); if(!r.ok)throw Error("API request failed");
-  const d=await r.json(); if(d.result!=="success")throw Error("API returned an error");
-  rates=d.rates||{};$("usd").textContent=(rates.USD||0).toFixed(6);$("eur").textContent=(rates.EUR||0).toFixed(6);
-  $("time").textContent=new Date(d.time_last_update_utc).toLocaleDateString();
-  $("status").className="status online";$("status").innerHTML='<i class="dot"></i>Live';
-  render();convert();
- }catch(e){$("status").innerHTML='<i class="dot"></i>Offline';$("result").textContent="Unable to fetch live data";}
+async function getJSON(url){
+  const r=await fetch(url,{headers:{Accept:"application/vnd.github+json"},cache:"no-store"});
+  if(!r.ok)throw new Error("Request failed: "+r.status);
+  return r.json();
 }
-function convert(){
- const a=Number($("amount").value)||0,f=$("from").value,t=$("to").value;
- if(!rates[f]||!rates[t])return;
- const cross=f==="INR"?rates[t]:t==="INR"?1/rates[f]:rates[t]/rates[f];
- $("result").textContent=a.toLocaleString()+" "+f+" = "+(a*cross).toLocaleString(undefined,{maximumFractionDigits:2})+" "+t;
+
+async function loadDashboard(){
+  $("status").className="status";$("status").innerHTML='<i class="dot"></i>Connecting to APIs';
+  try{
+    const [profile,repos,events,quote]=await Promise.all([
+      getJSON(GH+"/users/"+USER),
+      getJSON(GH+"/users/"+USER+"/repos?sort=updated&per_page=6"),
+      getJSON(GH+"/users/"+USER+"/events/public?per_page=6"),
+      fetch("https://api.quotable.io/random").then(r=>r.json())
+    ]);
+
+    $("avatar").src=profile.avatar_url;
+    $("name").textContent=profile.name||profile.login;
+    $("bio").textContent=profile.bio||"Developer • Open-source projects";
+    $("reposCount").textContent=profile.public_repos;
+    $("followers").textContent=profile.followers;
+    $("following").textContent=profile.following;
+    $("gists").textContent=profile.public_gists;
+    $("details").innerHTML=[
+      profile.location?'<b>Location:</b> '+escapeHTML(profile.location):"",
+      profile.company?'<br><b>Company:</b> '+escapeHTML(profile.company):"",
+      profile.blog?'<br><b>Website:</b> <a href="'+safeURL(profile.blog)+'" target="_blank">'+escapeHTML(profile.blog)+'</a>':"",
+      '<br><b>Joined:</b> '+new Date(profile.created_at).toLocaleDateString()
+    ].join("");
+
+    $("repos").innerHTML=repos.length?repos.map(r=>`
+      <a class="repo" href="${r.html_url}" target="_blank">
+        <h3>📁 ${escapeHTML(r.name)}</h3>
+        <p>${escapeHTML(r.description||"No description provided.")}</p>
+        <div class="tags">
+          <span class="tag">${escapeHTML(r.language||"Code")}</span>
+          <span class="tag">★ ${r.stargazers_count}</span>
+          <span class="tag">⑂ ${r.forks_count}</span>
+        </div>
+      </a>`).join(""):"<p class='muted'>No public repositories found.</p>";
+
+    $("events").innerHTML=events.length?events.map(e=>`
+      <div class="event"><b>${eventText(e)}</b><small>${new Date(e.created_at).toLocaleString()}</small></div>`).join(""):"<p class='muted'>No recent public activity.</p>";
+
+    if(quote&&quote.content){$("quote").textContent="“"+quote.content+"”";$("quoteAuthor").textContent="— "+(quote.author||"Unknown");}
+    $("status").className="status live";$("status").innerHTML='<i class="dot"></i>All APIs connected';
+  }catch(err){
+    console.error(err);
+    $("status").innerHTML='<i class="dot"></i>API connection issue';
+    $("quote").textContent="One of the APIs could not be reached. Click Refresh to try again.";
+  }
 }
-function render(){
- const popular=["USD","EUR","GBP","JPY","AED","AUD","CAD","SGD","CHF","CNY"];
- $("rates").innerHTML=popular.map(c=>'<div class="rate"><b>INR → '+c+'</b><span>'+Number(rates[c]).toFixed(6)+'</span></div>').join("");
+
+function eventText(e){
+  const repo=e.repo?.name||"a repository";
+  if(e.type==="PushEvent")return "Pushed code to "+repo;
+  if(e.type==="CreateEvent")return "Created "+(e.payload?.ref_type||"content")+" in "+repo;
+  if(e.type==="WatchEvent")return "Starred "+repo;
+  if(e.type==="ForkEvent")return "Forked "+repo;
+  if(e.type==="IssuesEvent")return (e.payload?.action||"Updated")+" an issue in "+repo;
+  if(e.type==="PullRequestEvent")return (e.payload?.action||"Updated")+" a pull request in "+repo;
+  return e.type.replace("Event","")+" in "+repo;
 }
-load();
+function escapeHTML(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));}
+function safeURL(s){try{return new URL(s.startsWith("http")?s:"https://"+s).href}catch{return "#"}}
+loadDashboard();
 </script>
 </body>
 </html>
