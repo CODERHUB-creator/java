@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Custom API Dashboard</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,Arial;background:#f4f7fb;color:#172033}.wrap{max-width:1200px;margin:auto;padding:32px}.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}.head h1{margin:0;font-size:30px}.head p{color:#687386}.btn{border:0;border-radius:10px;padding:11px 16px;background:#5b55e8;color:white;cursor:pointer}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.card,.panel{background:white;border:1px solid #e4e8ef;border-radius:16px;padding:20px;box-shadow:0 8px 24px #1820330d}.card span,.muted{color:#748094;font-size:12px}.card strong{display:block;font-size:24px;margin:8px 0}.main{display:grid;grid-template-columns:1fr 1.5fr;gap:16px;margin-top:16px}.panel h2{margin-top:0}.form{display:grid;grid-template-columns:1fr 1fr;gap:12px}label{font-size:12px;color:#687386}input,select{width:100%;padding:12px;margin-top:5px;border:1px solid #dce1ea;border-radius:9px;background:white}.result{margin-top:16px;background:#f0f2ff;border-radius:12px;padding:18px;font-size:22px;font-weight:700}.rates{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.rate{background:#f7f8fa;border-radius:10px;padding:14px}.rate b{display:block;margin-bottom:6px}.status{font-size:12px}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#f59e0b;margin-right:5px}.online .dot{background:#18a66b}@media(max-width:850px){.grid,.main{grid-template-columns:1fr 1fr}.main{grid-template-columns:1fr}.rates{grid-template-columns:1fr 1fr}}@media(max-width:550px){.wrap{padding:18px}.grid,.form,.rates{grid-template-columns:1fr}.head{display:block}.btn{margin-top:10px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="head">
+<div><h1>Custom API Dashboard</h1><p>Live currency intelligence powered by third-party APIs</p></div>
+<div><span id="status" class="status"><i class="dot"></i>Connecting</span> <button class="btn" onclick="load()">Refresh</button></div>
+</header>
+
+<section class="grid">
+<div class="card"><span>Base Currency</span><strong>INR</strong><span>Indian Rupee</span></div>
+<div class="card"><span>USD Rate</span><strong id="usd">—</strong><span>1 INR → USD</span></div>
+<div class="card"><span>EUR Rate</span><strong id="eur">—</strong><span>1 INR → EUR</span></div>
+<div class="card"><span>Last Update</span><strong id="time">—</strong><span>ExchangeRate API</span></div>
+</section>
+
+<section class="main">
+<div class="panel">
+<h2>Currency Converter</h2>
+<div class="form">
+<label>Amount<input id="amount" type="number" value="1000" min="0"></label>
+<label>From<select id="from"></select></label>
+<label>To<select id="to"></select></label>
+</div>
+<div class="result" id="result">Loading live rates…</div>
+</div>
+
+<div class="panel">
+<h2>Popular Market Rates</h2>
+<div class="rates" id="rates"></div>
+<p class="muted">Rates are fetched live from a public third-party exchange-rate API.</p>
+</div>
+</section>
+</div>
+
+<script>
+const API="https://open.er-api.com/v6/latest/";
+const C=["INR","USD","EUR","GBP","JPY","AUD","CAD","CHF","CNY","AED","SGD","NZD","HKD","KRW","THB","MYR","ZAR","BRL","MXN"];
+let rates={};
+const $=id=>document.getElementById(id);
+$("from").innerHTML=C.map(x=>`<option>${x}</option>`).join("");
+$("to").innerHTML=C.map(x=>`<option>${x}</option>`).join("");
+$("from").value="INR";$("to").value="USD";
+$("amount").addEventListener("input",convert);$("from").addEventListener("change",convert);$("to").addEventListener("change",convert);
+
+async function load(){
+ $("status").className="status";$("status").innerHTML='<i class="dot"></i>Connecting';
+ try{
+  const r=await fetch(API+"INR",{cache:"no-store"}); if(!r.ok)throw Error("API request failed");
+  const d=await r.json(); if(d.result!=="success")throw Error("API returned an error");
+  rates=d.rates||{};$("usd").textContent=(rates.USD||0).toFixed(6);$("eur").textContent=(rates.EUR||0).toFixed(6);
+  $("time").textContent=new Date(d.time_last_update_utc).toLocaleDateString();
+  $("status").className="status online";$("status").innerHTML='<i class="dot"></i>Live';
+  render();convert();
+ }catch(e){$("status").innerHTML='<i class="dot"></i>Offline';$("result").textContent="Unable to fetch live data";}
+}
+function convert(){
+ const a=Number($("amount").value)||0,f=$("from").value,t=$("to").value;
+ if(!rates[f]||!rates[t])return;
+ const cross=f==="INR"?rates[t]:t==="INR"?1/rates[f]:rates[t]/rates[f];
+ $("result").textContent=a.toLocaleString()+" "+f+" = "+(a*cross).toLocaleString(undefined,{maximumFractionDigits:2})+" "+t;
+}
+function render(){
+ const popular=["USD","EUR","GBP","JPY","AED","AUD","CAD","SGD","CHF","CNY"];
+ $("rates").innerHTML=popular.map(c=>'<div class="rate"><b>INR → '+c+'</b><span>'+Number(rates[c]).toFixed(6)+'</span></div>').join("");
+}
+load();
+</script>
+</body>
+</html>
